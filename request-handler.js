@@ -47,11 +47,12 @@ var handleRequest = function(request, response) {
   }
   else if(request.method === "POST"){
     var postdata = '';
-    response.writeHead(302, headers);
+    response.writeHead(201, headers);
     request.on("data", function(chunk){
       postdata += chunk;
 
-    }).on("end", function(){
+    });
+    request.on("end", function(){
       console.log(postdata);
       //messages.push(JSON.stringify(postdata));
       messages.push(JSON.parse(postdata));
@@ -66,7 +67,9 @@ var handleRequest = function(request, response) {
 
 };
 
-module.exports = handleRequest;
+module.exports = {
+  handleRequest: handleRequest
+};
 
 
 // var requestListener = function (request, response) {
