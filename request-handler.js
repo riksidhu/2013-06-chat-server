@@ -3,6 +3,7 @@
  * are on different domains. (Your chat client is running from a url
  * like file://your/chat/client/index.html, which is considered a
  * different domain.) */
+
 var defaultCorsHeaders = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -40,10 +41,13 @@ var handleRequest = function(request, response) {
     //   'Content-Type': 'application/json'
     // }, defaultCorsHeaders);
 
-    response.writeHead(200, headers);
-    response.end(JSON.stringify({
-      results: messages
-    }));
+    if (request.url.indexOf("/classes") > -1) {
+        response.writeHead(200, headers);
+        response.end(JSON.stringify(messages));
+    } else {
+        response.writeHead(404, headers);
+        response.end();
+    }
   }
   else if(request.method === "POST"){
     var postdata = '';
@@ -56,7 +60,6 @@ var handleRequest = function(request, response) {
       console.log(postdata);
       //messages.push(JSON.stringify(postdata));
       messages.push(JSON.parse(postdata));
-      console.log(messages);
       response.end(postdata);
     });
   }
